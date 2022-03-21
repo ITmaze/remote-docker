@@ -45,7 +45,7 @@ You should be able to run the ``docker`` command as if Docker is installed on yo
 
 I use this by putting all these scripts in ~/bin. On my *workstation*, I use ~/docker/itmaze/ to store any containers built with ``apt-docker``. All images built using this are tagged itmaze/{xyz}:latest. I am the "default" maintainer for such images. If you do upload any images, you should update the email address (and the tag).
 
-You can create more than one mount and use more than one container at the same time. This is useful if you want to run the aws-cli or git command and provide access to ~/.ssh or ~/.aws as well as the current directory.
+You can create more than one mount and use more than one volume in the same container at the same time. This is useful if you want to run the aws-cli or git command and provide access to ~/.ssh or ~/.aws as well as the current directory.
 
 
 # Scripts
