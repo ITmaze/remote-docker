@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "docker-compose $@"
+
+cat docker-compose.yaml | ssh docker@docker.local "cat | docker-compose -f - $@"

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ $# -eq 2 ]
+then
+	container="$1"
+	executable="$2"
+else
+	container="$1"
+	executable="${container}"
+fi
+
+if [ -d ~/docker/itmaze/${container} ]
+then
+	echo "Error: ~/docker/itmaze/${container} already exists"
+	exit 1
+fi
+
+if [ -e ~/bin/${executable} ]
+then
+	echo "Error: ~/bin/${executable} already exists."
+	exit 1
+fi
+
+mkdir -p ~/docker/itmaze/${container}
+(
+	cd ~/docker/itmaze/${container}
+	make_dockerfile ${executable}
+	docker-build -t itmaze/${container}
+	ln -s ~/docker/itmaze/${container}/launch ~/bin/${executable}
+)
+

@@ -1,0 +1,23 @@
+#!/bin/bash
+debug () [[ -v DEBUG ]]
+
+debug && set -x
+
+if [ $# -ne 1 ] ; then
+	echo Usage: $(basename "$0") volume
+	exit 1
+fi
+
+mountVolume=$1
+
+ip=docker.local
+
+sshCMD() {
+	ssh docker@${ip} "$@"
+}
+
+docker volume rm "${mountVolume}"
+
+sshCMD "fusermount -u /home/docker/${mountVolume}"
+sshCMD "rmdir ${mountVolume}"
+

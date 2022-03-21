@@ -1,0 +1,37 @@
+#!/bin/bash
+
+container=$(basename "$(pwd)")
+
+if [ $# -eq 1 ]
+then
+	executable="$1"
+else
+	executable="${container}"
+fi
+
+cat <<-EOF > Dockerfile
+	FROM debian:stable-slim
+
+	LABEL maintainer="onno@itmaze.com.au"
+
+	ARG DEBIAN_FRONTEND=noninteractive
+
+	RUN apt-get update
+	RUN apt-get -y upgrade
+	RUN apt-get -y install ${container}
+
+	RUN ln -s \$(which ${executable}) /usr/local/bin/${executable}
+
+	RUN useradd -ms /bin/bash docker
+	USER docker
+
+	ENTRYPOINT ["/usr/local/bin/${executable}"]
+	CMD ["--help"]
+EOF
+
+cat <<-EOF > launch
+	#!/bin/bash
+
+	docker.x11 itmaze/${container}:latest "\$@"
+EOF
+chmod +x launch

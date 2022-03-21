@@ -1,0 +1,45 @@
+#!/bin/bash
+debug () [[ -v DEBUG ]]
+
+debug && set -x
+
+if [ $# -eq 1 ] ; then
+	mountVolume=$1
+	mountPath=$(pwd)
+elif [ $# -ne 2 ] ; then
+	echo Usage: $(basename "$0") volume [path]
+	exit 1
+else
+	mountVolume=$1
+	mountPath=$2
+fi
+
+sshCMD() {
+	ssh docker@${ip} "$@"
+}
+
+if docker volume list -q | fromdos | grep -q ^"${mountVolume}"$ ; then
+	echo Error: Volume exists: ${mountVolume}
+	exit 1
+fi
+
+ip=docker.local
+me=$(whoami)
+myIP=$(hostname -I | cut -d ' ' -f1)
+
+sshCMD "mkdir -p ${mountVolume}"
+
+sshCMD "sshfs " \
+	"-o reconnect " \
+	"-o ServerAliveInterval=15 " \
+	"-o ServerAliveCountMax=3 " \
+	"-o UserKnownHostsFile=/dev/null " \
+	"-o allow_other" \
+	"-o StrictHostKeyChecking=no " \
+	"-o auto_unmount " \
+	"-o uid=0 " \
+	"-o gid=0 " \
+	"-o idmap=user " \
+	"${me}@${myIP}:\"${mountPath}\" ${mountVolume}"
+
+docker volume create --name "${mountVolume}" -o type=none -o "device=/home/docker/${mountVolume}" -o o=bind --label "sshfs=yes" --label "host=${me}@${myIP}" --label "path=\"${mountPath}\""

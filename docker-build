@@ -1,0 +1,3 @@
+#!/bin/bash
+
+tar -hzcf - . | ssh docker@docker.local "cat | docker build - $@"
