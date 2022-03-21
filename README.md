@@ -106,4 +106,4 @@ I'm looking at providing some example Dockerfile and launch files. This section 
 - I have tested this on a bare machine to ensure that it should work for you out of the box, but it might not. If it doesn't please file an issue and I'll have a look.
 - Feel free to get in touch, but if you want to fix something or suggest a feature, please create an issue or supply a patch.
 - This was inspired by the pioneering hard work by [Jess Frazelle](https://github.com/jessfraz) who introduced me to the idea of running everything inside Docker. My workstation isn't quite there yet, but it's getting closer every day.
-- I blame [Corey Quinn](https://www.lastweekinaws.com/t/) for asking silly questions and my mother for not keeping my big mouth shut - enjoy!
+- I blame [Corey Quinn](https://www.lastweekinaws.com/t/) for asking silly questions and my mother for teaching me not to keep my big mouth shut - enjoy!
