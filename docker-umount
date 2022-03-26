@@ -18,6 +18,6 @@ sshCMD() {
 
 docker volume rm "${mountVolume}"
 
-sshCMD "fusermount -u /home/docker/${mountVolume}"
+sshCMD "fusermount -zu /home/docker/${mountVolume}"
 sshCMD "rmdir ${mountVolume}"
 

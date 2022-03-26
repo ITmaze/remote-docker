@@ -19,7 +19,7 @@ sshCMD() {
 }
 
 if docker volume list -q | fromdos | grep -q ^"${mountVolume}"$ ; then
-	echo Error: Volume exists: ${mountVolume}
+	echo Warning: Volume exists: ${mountVolume}, skipped.
 	exit 1
 fi
 
