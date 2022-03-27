@@ -61,9 +61,20 @@ The scripts in use are:
 - ``make_dockerfile``, create a minimal Dockerfile and launch command, used by ``apt-docker``.
 - ``docker-build``, implements ``docker build``, using a tar file of the current directory, sent over ssh to the build command running on the *docker-machine*.
 - ``docker.build.me``, build the current directory as a container, tagged with the directory name. Uses ``docker-build``.
-- ``docker-compose``, experimental, attempt at implementing a remote docker-compose command, likely broken.
+- ``docker-compose``, the local directory is mounted on the *docker-machine* and the docker-compose command is run inside that directory. Please read the docker-compose caveats below.  Uses ``docker-mount`` and ``docker-umount``.
 - ``docker-machine``, execute ``docker-machine`` commands on the *docker-machine*.
 - ``docker-search``, run ``docker search --no-trunc`` on the *docker-machine*.
+
+
+# Docker-Compose Caveats
+
+The ``docker-compose`` command creates a mount-point on the *docker-machine* in much the same way as used in other scripts. It even creates a docker volume, which isn't actually used. The mount-point is used as the working directory for running the actual ``docker-compose`` command on the *docker-machine*.
+
+Unlike the other commands above, the ``docker-compose`` command does *not* use ``uuid`` to create the unique volume name. It uses the ``md5sum`` of the full path of the current working directory instead. It appears that the current directory name is used in the default naming convention when containers, volumes and networks are created by the compose command. Having a unique volume name meant that this directory name would change at every invocation, which meant that the default names changed every time, resulting in ``docker-compose up`` and ``docker-compose down`` receiving a different directory name, and thus not being able to destroy the containers, volumes and networks it created since they would have a different (unknown) name.
+
+By using the ``md5sum`` of the current path the mount point name stays the same every time, making the behaviour more predictable, but it isn't as robust, since renaming a directory at any point in the path will change the md5sum.
+
+Suggestions on how to improve this are welcome.
 
 
 # Requirements
@@ -101,7 +112,6 @@ I'm looking at providing some example Dockerfile and launch files. This section 
 - Fair warning: This isn't feature complete and probably kills kittens.
 - Until a few days ago this was a set of scripts on my workstation. Today it's a github project. If you break it, you get to keep both parts.
 - Naming isn't consistent.
-- I've been experimenting with ``docker-compose`` using the same mechanism.
 - There are times when a command doesn't "come back", likely the Docker console is "helping". You can kill the Docker container from another shell using ``docker ps`` and ``docker kill``.
 - I have tested this on a bare machine to ensure that it should work for you out of the box, but it might not. If it doesn't please file an issue and I'll have a look.
 - Feel free to get in touch, but if you want to fix something or suggest a feature, please create an issue or supply a patch.
