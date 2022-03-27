@@ -6,9 +6,9 @@ This allows you to launch Firefox inside a Docker container, using your local ~/
 
 You can use this same system to run the latest version of git - when for example your copy of openssh is out of date and github updates the formats of keys - again, or use apt to install an application as a Docker container, or trial some new source without impacting your local environment.
 
-If you want to run version a specific version of Python, you can do that without needing to install it locally.
+If you want to run a specific version of Python, you can do that without needing to install it locally.
 
-This uses sshfs to reverse mount the file-system (from the *docker-machine* to your *workstation*), create a docker-volume, then mount that on the container with the working directory set to the mount and taking care of UID and GID.
+This uses fuse sshfs to reverse mount the file-system (from the *docker-machine* to your *workstation*), create a docker-volume, then mount that on the container with the working directory set to the mount and taking care of UID and GID.
 
 
 # Terms and Assumptions
@@ -98,7 +98,13 @@ One thing both have in common is that you need to be able to ssh between both wi
 
 # Examples
 
-I'm looking at providing some example Dockerfile and launch files. This section will be updated once those are ready to show. Note that the docker-run command shows much of the logic of creating a volume and using it. You can make your own with the same logic to mount something like ~/.ssh or ~/.aws and then call ``docker-run`` to mount the current directory - remember to add the new volume and path to the command, otherwise you're likely to get duplicate mount-point errors.
+The examples directory shows some of the ways that this tool can be used. It incomplete and as I go through my existing use of this code (70+ containers), the example directory will likely grow.
+
+To use a container, I add a symlink between my ~/bin and a launch file. For example: ~/bin/speedtest -> ./examples/speedtest/launch
+
+- __firefox-esr__, runs firefox across X11, linking the /home/docker/Downloads directory to the /home/onno/Downloads directory, so that the mount point inside the container has the same path as my actual ~/Downloads directory. Update the username to reflect your own user.
+- __git__, runs git in the current directory, but mounts the ~/.ssh directory so it can access your keys.
+- __speedtest__, simple example of running a docker command without any volume mounting.
 
 
 # Bugs

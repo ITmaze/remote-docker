@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~/Downloads
+
+docker.x11 --ipc=host --shm-size=2g itmaze/firefox-esr:latest --no-remote --sync "$@"
