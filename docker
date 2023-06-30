@@ -1,3 +1,10 @@
 #!/bin/bash
+debug () [[ -v DEBUG ]]
 
-ssh -C -e none -Y -o LogLevel=QUIET -tt docker@docker.local docker "$@"
+debug && set -x
+debug && set -o xtrace
+debug && set -v
+
+#FIXME See: https://unix.stackexchange.com/questions/608250/how-to-construct-bash-command-and-arguments-for-ssh-su-c
+
+/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -tt docker@docker.local docker "$@"

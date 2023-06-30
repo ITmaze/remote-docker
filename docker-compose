@@ -2,7 +2,6 @@
 
 function remove_volume() {
 	volumeName=$1
-	echo -n Removing volume: >> /dev/stderr
 	docker-umount ${volumeName} >> /dev/stderr
 }
 
@@ -11,9 +10,8 @@ then
 	# We need the volume name to be the same each time, since docker-compose uses it as a label.
 	volumeName="compose_$(pwd | md5sum | tr -cd '[:alnum:]')"
 	trap "remove_volume ${volumeName}" EXIT
-	echo -n Creating volume: >> /dev/stderr
 	docker-mount ${volumeName} >> /dev/stderr
-	ssh docker@docker.local "cd ~/${volumeName} && docker-compose $@"
+	/usr/bin/ssh docker@docker.local "cd ~/${volumeName} && docker-compose $@"
 else
 	docker-compose "$@"
 fi

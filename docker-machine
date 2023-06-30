@@ -1,4 +1,4 @@
 #!/bin/bash
 
-ssh -Y -o LogLevel=QUIET -t docker@docker.local "$@"
+/usr/bin/ssh -Y -o LogLevel=QUIET -t docker@docker.local "$@"
 

@@ -1,4 +1,4 @@
 #!/bin/bash
 
 name=$(basename "$(pwd)")
-docker-build -t "itmaze/${name}"
+docker-build -t "itmaze/${name}" "$@"

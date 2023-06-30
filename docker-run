@@ -1,17 +1,20 @@
 #!/bin/bash
+debug () [[ -v DEBUG ]]
+
+debug && set -x
+debug && set -o xtrace
+debug && set -v
 
 function remove_volume() {
 	volumeName=$1
-	echo -n Removing volume: >> /dev/stderr
-	docker-umount ${volumeName} >> /dev/stderr
+	docker-umount ${volumeName}
 }
 
 if type docker-mount &> /dev/null
 then
 	volumeName=$(uuidgen)
 	trap "remove_volume ${volumeName}" EXIT
-	echo -n Creating volume: >> /dev/stderr
-	docker-mount ${volumeName} >> /dev/stderr
+	docker-mount ${volumeName}
 	docker run --rm -v${volumeName}:\"$(pwd)\" -w\"$(pwd)\" "$@"
 else
 	docker run --rm -v\"$(pwd)\":\"$(pwd)\" -w\"$(pwd)\" "$@"

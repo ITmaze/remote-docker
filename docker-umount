@@ -2,6 +2,8 @@
 debug () [[ -v DEBUG ]]
 
 debug && set -x
+debug && set -o xtrace
+debug && set -v
 
 if [ $# -ne 1 ] ; then
 	echo Usage: $(basename "$0") volume
@@ -13,10 +15,10 @@ mountVolume=$1
 ip=docker.local
 
 sshCMD() {
-	ssh docker@${ip} "$@"
+	/usr/bin/ssh docker@${ip} "$@"
 }
 
-docker volume rm "${mountVolume}"
+dummy=$(docker volume rm "${mountVolume}")
 
 sshCMD "fusermount -zu /home/docker/${mountVolume}"
 sshCMD "rmdir ${mountVolume}"

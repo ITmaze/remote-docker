@@ -2,6 +2,8 @@
 debug () [[ -v DEBUG ]]
 
 debug && set -x
+debug && set -o xtrace
+debug && set -v
 
 if [ $# -eq 1 ] ; then
 	mountVolume=$1
@@ -15,7 +17,7 @@ else
 fi
 
 sshCMD() {
-	ssh docker@${ip} "$@"
+	/usr/bin/ssh docker@${ip} "$@"
 }
 
 if docker volume list -q | fromdos | grep -q ^"${mountVolume}"$ ; then
@@ -29,7 +31,7 @@ myIP=$(hostname -I | cut -d ' ' -f1)
 
 sshCMD "mkdir -p ${mountVolume}"
 
-sshCMD "sshfs " \
+sshCMD "/usr/bin/sshfs " \
 	"-o reconnect " \
 	"-o ServerAliveInterval=15 " \
 	"-o ServerAliveCountMax=3 " \
@@ -42,4 +44,4 @@ sshCMD "sshfs " \
 	"-o idmap=user " \
 	"${me}@${myIP}:\"${mountPath}\" ${mountVolume}"
 
-docker volume create --name "${mountVolume}" -o type=none -o "device=/home/docker/${mountVolume}" -o o=bind --label "sshfs=yes" --label "host=${me}@${myIP}" --label "path=\"${mountPath}\""
+dummy=$(docker volume create --name "${mountVolume}" -o type=none -o "device=/home/docker/${mountVolume}" -o o=bind --label "sshfs=yes" --label "host=${me}@${myIP}" --label "path=\"${mountPath}\""  --label "script_origin=${script_origin}")
