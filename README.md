@@ -64,6 +64,7 @@ The scripts in use are:
 - ``docker-compose``, the local directory is mounted on the *docker-machine* and the docker-compose command is run inside that directory. Please read the docker-compose caveats below.  Uses ``docker-mount`` and ``docker-umount``.
 - ``docker-machine``, execute ``docker-machine`` commands on the *docker-machine*.
 - ``docker-search``, run ``docker search --no-trunc`` on the *docker-machine*.
+- ``docker.ssh.cmd``, the underlying ssh command that actually sends the docker commands to the *docker-machine*. You can edit the 'userName' and 'hostName' variables here.
 
 
 # Docker-Compose Caveats

@@ -5,6 +5,9 @@ debug && set -x
 debug && set -o xtrace
 debug && set -v
 
+userName="docker"
+hostName="docker.local"
+
 declare -a parameters
 
 while [ "$#" -gt 0 ]
@@ -20,4 +23,4 @@ done
 
 printf -v remote_command '%q ' "$@"
 
-/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l docker "${parameters[@]}" docker.local "${remote_command}"
+/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostname}" "${remote_command}"
