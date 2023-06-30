@@ -1,4 +1,5 @@
 FROM debian:stable-slim
+LABEL maintainer="onno@itmaze.com.au"
 
 ARG DEBIAN_FRONTEND=noninteractive
 

@@ -4,13 +4,19 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get -y install xterm
-
-RUN apt-get -y install firefox-esr
-RUN apt-get -y install libcanberra-gtk-module libcanberra-gtk3-module libpci3 libegl1
-RUN apt-get -y install fonts-wqy-microhei
-RUN apt-get -y install firefox-esr-l10n-en-gb hunspell-en-au hunspell-en-gb hyphen-en-gb
-RUN apt-get -y install webext-ublock-origin
+RUN apt-get -y install \
+	firefox-esr \
+	firefox-esr-l10n-en-gb \
+	fonts-wqy-microhei \
+	hunspell-en-au \
+	hunspell-en-gb \
+	hyphen-en-gb \
+	libcanberra-gtk3-module \
+	libcanberra-gtk-module \
+	libegl1 \
+	libpci3 \
+	webext-ublock-origin \
+	xterm
 
 RUN echo >> /etc/firefox-esr/firefox-esr.js
 RUN echo '// Set local preferences from Dockerfile' >> /etc/firefox-esr/firefox-esr.js

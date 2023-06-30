@@ -2,7 +2,6 @@
 
 function remove_volume() {
 	volumeName=$1
-	echo -n Removing volume: >> /dev/stderr
 	docker-umount ${volumeName} >> /dev/stderr
 }
 
@@ -10,7 +9,6 @@ if type docker-mount &> /dev/null
 then
 	volumeName=$(uuidgen)
 	trap "remove_volume ${volumeName}" EXIT
-	echo -n Creating volume: >> /dev/stderr
 	docker-mount "${volumeName}" "/home/onno/.ssh" >> /dev/stderr
 fi
 
