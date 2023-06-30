@@ -23,4 +23,4 @@ done
 
 printf -v remote_command '%q ' "$@"
 
-/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostname}" "${remote_command}"
+/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
