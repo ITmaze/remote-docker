@@ -12,14 +12,8 @@ fi
 
 mountVolume=$1
 
-ip=docker.local
-
-sshCMD() {
-	/usr/bin/ssh docker@${ip} "$@"
-}
-
 dummy=$(docker volume rm "${mountVolume}")
 
-sshCMD "fusermount -zu /home/docker/${mountVolume}"
-sshCMD "rmdir ${mountVolume}"
+docker.ssh.cmd fusermount -zu "/home/docker/${mountVolume}"
+docker.ssh.cmd rmdir "${mountVolume}"
 

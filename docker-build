@@ -1,3 +1,8 @@
 #!/bin/bash
+debug () [[ -v DEBUG ]]
 
-tar -hzcf - . | /usr/bin/ssh docker@docker.local "cat | docker build - $@"
+debug && set -x
+debug && set -o xtrace
+debug && set -v
+
+tar -hzcf - . | docker.ssh.cmd docker build - "$@"

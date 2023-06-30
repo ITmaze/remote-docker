@@ -16,32 +16,27 @@ else
 	mountPath=$2
 fi
 
-sshCMD() {
-	/usr/bin/ssh docker@${ip} "$@"
-}
-
 if docker volume list -q | fromdos | grep -q ^"${mountVolume}"$ ; then
 	echo Warning: Volume exists: ${mountVolume}, skipped.
 	exit 1
 fi
 
-ip=docker.local
 me=$(whoami)
 myIP=$(hostname -I | cut -d ' ' -f1)
 
-sshCMD "mkdir -p ${mountVolume}"
+docker.ssh.cmd mkdir -p "${mountVolume}"
 
-sshCMD "/usr/bin/sshfs " \
-	"-o reconnect " \
-	"-o ServerAliveInterval=15 " \
-	"-o ServerAliveCountMax=3 " \
-	"-o UserKnownHostsFile=/dev/null " \
-	"-o allow_other" \
-	"-o StrictHostKeyChecking=no " \
-	"-o auto_unmount " \
-	"-o uid=0 " \
-	"-o gid=0 " \
-	"-o idmap=user " \
-	"${me}@${myIP}:\"${mountPath}\" ${mountVolume}"
+docker.ssh.cmd /usr/bin/sshfs \
+	-o reconnect \
+	-o ServerAliveInterval=15 \
+	-o ServerAliveCountMax=3 \
+	-o UserKnownHostsFile=/dev/null \
+	-o allow_other \
+	-o StrictHostKeyChecking=no \
+	-o auto_unmount \
+	-o uid=0 \
+	-o gid=0 \
+	-o idmap=user \
+	"${me}"@${myIP}:"${mountPath}" "${mountVolume}"
 
-dummy=$(docker volume create --name "${mountVolume}" -o type=none -o "device=/home/docker/${mountVolume}" -o o=bind --label "sshfs=yes" --label "host=${me}@${myIP}" --label "path=\"${mountPath}\""  --label "script_origin=${script_origin}")
+dummy=$(docker volume create --name "${mountVolume}" -o type=none -o device="/home/docker/${mountVolume}" -o o=bind --label sshfs=yes --label host="${me}"@${myIP} --label path="${mountPath}"  --label script_origin="${script_origin}")

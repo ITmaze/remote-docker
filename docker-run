@@ -15,7 +15,7 @@ then
 	volumeName=$(uuidgen)
 	trap "remove_volume ${volumeName}" EXIT
 	docker-mount ${volumeName}
-	docker run --rm -v${volumeName}:\"$(pwd)\" -w\"$(pwd)\" "$@"
+	docker run --rm -v${volumeName}:"$(pwd)" -w"$(pwd)" "$@"
 else
-	docker run --rm -v\"$(pwd)\":\"$(pwd)\" -w\"$(pwd)\" "$@"
+	docker run --rm -v"$(pwd)":"$(pwd)" -w"$(pwd)" "$@"
 fi

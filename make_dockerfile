@@ -32,6 +32,6 @@ EOF
 cat <<-EOF > launch
 	#!/bin/bash
 
-	docker.x11 itmaze/${container}:latest \$(printf "%q " "\$@")
+	docker.x11 itmaze/${container}:latest "\$@"
 EOF
 chmod +x launch

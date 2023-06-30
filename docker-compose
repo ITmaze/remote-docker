@@ -1,4 +1,9 @@
 #!/bin/bash
+debug () [[ -v DEBUG ]]
+
+debug && set -x
+debug && set -o xtrace
+debug && set -v
 
 function remove_volume() {
 	volumeName=$1
@@ -11,7 +16,9 @@ then
 	volumeName="compose_$(pwd | md5sum | tr -cd '[:alnum:]')"
 	trap "remove_volume ${volumeName}" EXIT
 	docker-mount ${volumeName} >> /dev/stderr
-	/usr/bin/ssh docker@docker.local "cd ~/${volumeName} && docker-compose $@"
+	docker.ssh.cmd bash <<EOC
+		cd "${volumeName}" && docker-compose "$@"
+	EOC
 else
 	docker-compose "$@"
 fi
