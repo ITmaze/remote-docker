@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker.x11 itmaze/pandoc:latest "$@"
