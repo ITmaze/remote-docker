@@ -70,7 +70,7 @@ The scripts in use are:
 
 The ``docker-compose`` command creates a mount-point on the *docker-machine* in much the same way as used in other scripts. It even creates a docker volume, which isn't actually used. The mount-point is used as the working directory for running the actual ``docker-compose`` command on the *docker-machine*.
 
-Unlike the other commands above, the ``docker-compose`` command does *not* use ``uuid`` to create the unique volume name. It uses the ``md5sum`` of the full path of the current working directory instead. It appears that the current directory name is used in the default naming convention when containers, volumes and networks are created by the compose command. Having a unique volume name meant that this directory name would change at every invocation, which meant that the default names changed every time, resulting in ``docker-compose up`` and ``docker-compose down`` receiving a different directory name, and thus not being able to destroy the containers, volumes and networks it created since they would have a different (unknown) name.
+Unlike the other commands above, the ``docker-compose`` command does *not* use ``uuidgen`` to create the unique volume name. It uses the ``md5sum`` of the full path of the current working directory instead. It appears that the current directory name is used in the default naming convention when containers, volumes and networks are created by the compose command. Having a unique volume name meant that this directory name would change at every invocation, which meant that the default names changed every time, resulting in ``docker-compose up`` and ``docker-compose down`` receiving a different directory name, and thus not being able to destroy the containers, volumes and networks it created since they would have a different (unknown) name.
 
 By using the ``md5sum`` of the current path the mount point name stays the same every time, making the behaviour more predictable, but it isn't as robust, since renaming a directory at any point in the path will change the md5sum.
 
@@ -92,13 +92,14 @@ One thing both have in common is that you need to be able to ssh between both wi
 ## Docker-Machine requirements:
 - docker
 - ssh
+- sshd
 - sshfs
 - write permission on the home directory of the docker user
 
 
 # Examples
 
-The examples directory shows some of the ways that this tool can be used. It incomplete and as I go through my existing use of this code (70+ containers), the example directory will likely grow.
+The examples directory shows some of the ways that this tool can be used. It is incomplete and as I go through my existing use of this code (70+ containers), the example directory will likely grow.
 
 To use a container, I add a symlink between my ~/bin and a launch file. For example: ~/bin/speedtest -> ./examples/speedtest/launch
 
