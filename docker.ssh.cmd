@@ -23,4 +23,14 @@ done
 
 printf -v remote_command '%q ' "$@"
 
-/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
+# Source: https://scripter.co/nim-check-if-stdin-stdout-are-associated-with-terminal-or-pipe/
+if [[ -t 0 ]]
+then
+	# terminal
+	interactive_tty=""
+else
+	# pipe
+	interactive_tty="-n"
+fi
+
+/usr/bin/ssh ${interactive_tty} -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
