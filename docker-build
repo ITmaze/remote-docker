@@ -5,4 +5,4 @@ debug && set -x
 debug && set -o xtrace
 debug && set -v
 
-tar -hzcf - . | docker.ssh.pipe.cmd docker build - "$@"
+tar -hzcf - . | docker.ssh.cmd docker build - "$@"

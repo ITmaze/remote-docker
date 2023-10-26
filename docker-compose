@@ -16,7 +16,7 @@ then
 	volumeName="compose_$(pwd | md5sum | tr -cd '[:alnum:]')"
 	trap "remove_volume ${volumeName}" EXIT
 	docker-mount ${volumeName} >> /dev/stderr
-	docker.ssh.pipe.cmd bash <<EOC
+	docker.ssh.cmd bash <<EOC
 		cd "${volumeName}" && docker-compose "$@"
 	EOC
 else
