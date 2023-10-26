@@ -112,7 +112,7 @@ To use a container, I add a symlink between my ~/bin and a launch file. For exam
 # Bugs
 
 - There are times when volumes do not un-mount cleanly. Use ``docker volume prune -f`` to remove all unused volumes.
-- The quote handling isn't clean, sometimes double quoting is required. This appears to be an ssh *feature*. Using a git container to commit for example requires some shenanigans: ``git commit -m "'Initial commit.'"``
+- Fixed: 58546e7 <del>The quote handling isn't clean, sometimes double quoting is required. This appears to be an ssh *feature*. Using a git container to commit for example requires some shenanigans: ``git commit -m "'Initial commit.'"``</del>
 
 
 # Kittens Clause
