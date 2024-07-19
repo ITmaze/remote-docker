@@ -33,4 +33,9 @@ else
 	interactive_tty="-n"
 fi
 
-/usr/bin/ssh ${interactive_tty} -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
+if [[ -v DEBUG ]]
+then
+	/usr/bin/ssh ${interactive_tty} -C -e none -Y -v -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
+else
+	/usr/bin/ssh ${interactive_tty} -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
+fi
