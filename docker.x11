@@ -2,4 +2,4 @@
 
 export script_origin=$(ps -o comm= $PPID)
 
-docker-run -e DISPLAY -e TZ=Australia/Perth --net=host --volume="/home/docker/.Xauthority:/home/docker/.Xauthority:rw" "$@"
+docker-run -e DISPLAY -e XAUTHORITY="/home/docker/.Xauthority" -e TZ=Australia/Perth --net=host --volume="/home/docker/.Xauthority:/home/docker/.Xauthority:rw" "$@"
