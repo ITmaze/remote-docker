@@ -125,9 +125,10 @@ To use a container, I add a symlink between my ~/bin and a launch file. For exam
 - __speedtest__, simple example of running a docker command without any volume mounting.
 
 
-# Bugs
+# Bugs and potential Security Issues
 
-- There are times when volumes do not un-mount cleanly. Use `docker volume prune -f` to remove all unused volumes.
+- An sshfs mount exists while a container is running. Anyone with access to the *docker-machine* also has full access to all the sshfs mounts.
+- There are times when `docker-volume` volumes do not un-mount cleanly, root cause to be determined, but likely interrupted launch of a command. Note that these volumes don't actually take up any disk-space, since they're sshfs mounts from the *docker-machine* to the *workstation*. You can remove such a mount using `docker-umount {volumeName}`, but note that you can only use one {volumeName} at a time.
 - Fixed: 58546e7 <del>The quote handling isn't clean, sometimes double quoting is required. This appears to be an ssh *feature*. Using a git container to commit for example requires some shenanigans: `git commit -m "'Initial commit.'"`</del>
 - Fixed: 909ba1e <del>Note that currently the console displays "Creating volume:" and "Removing volume:" messages. If you know how to make those go away, please provide a patch. (Yes, I'm aware that I'm echoing those strings, it's the volume id from Docker that really needs hiding that I cannot control.)</del>
 
