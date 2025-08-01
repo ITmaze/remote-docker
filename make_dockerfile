@@ -1,4 +1,6 @@
 #!/bin/bash
+local_config_dir="$(dirname "$(readlink -f "$0")")"
+source "${local_config_dir}/docker.config"
 
 container=$(basename "$(pwd)")
 
@@ -12,7 +14,7 @@ fi
 cat <<-EOF > Dockerfile
 	FROM debian:stable-slim
 
-	LABEL maintainer="onno@itmaze.com.au"
+	LABEL maintainer="${local_docker_maintainer}"
 
 	ARG DEBIAN_FRONTEND=noninteractive
 
@@ -32,6 +34,6 @@ EOF
 cat <<-EOF > launch
 	#!/bin/bash
 
-	docker.x11 itmaze/${container}:latest "\$@"
+	docker.x11 "${local_docker_repo}/${container}:latest" "\$@"
 EOF
 chmod +x launch

@@ -1,22 +1,19 @@
 #!/bin/bash
-debug () [[ -v DEBUG ]]
+local_config_dir="$(dirname "$(readlink -f "$0")")"
+source "${local_config_dir}/docker.config"
 
-debug && set -x
-debug && set -o xtrace
-debug && set -v
+volumeName="compose_$(pwd | md5sum | tr -cd '[:alnum:]')"
 
 function remove_volume() {
-	volumeName=$1
-	docker-umount ${volumeName} >> /dev/stderr
+	docker-umount "${volumeName}" >> /dev/stderr
 }
 
 if type docker-mount &> /dev/null
 then
 	# We need the volume name to be the same each time, since docker-compose uses it as a label.
-	volumeName="compose_$(pwd | md5sum | tr -cd '[:alnum:]')"
-	trap "remove_volume ${volumeName}" EXIT
-	docker-mount ${volumeName} >> /dev/stderr
-	docker.ssh.pipe.cmd bash <<EOC
+	trap "remove_volume" EXIT
+	docker-mount "${volumeName}" >> /dev/stderr
+	docker.ssh.pipe.cmd bash <<-EOC
 		cd "${volumeName}" && docker-compose "$@"
 	EOC
 else

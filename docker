@@ -1,8 +1,5 @@
 #!/bin/bash
-debug () [[ -v DEBUG ]]
-
-debug && set -x
-debug && set -o xtrace
-debug && set -v
+local_config_dir="$(dirname "$(readlink -f "$0")")"
+source "${local_config_dir}/docker.config"
 
 docker.ssh.cmd -tt docker "$@"

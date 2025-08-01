@@ -1,18 +1,12 @@
 #!/bin/bash
-debug () [[ -v DEBUG ]]
-
-debug && set -x
-debug && set -o xtrace
-debug && set -v
-
-userName="docker"
-hostName="docker.local"
+local_config_dir="$(dirname "$(readlink -f "$0")")"
+source "${local_config_dir}/docker.config"
 
 declare -a parameters
 
 while [ "$#" -gt 0 ]
 do
-	if [ ${1:0:1} == '-' ]
+	if [ "${1:0:1}" == '-' ]
 	then
 		parameters+=("$1")
 		shift
@@ -23,4 +17,4 @@ done
 
 printf -v remote_command '%q ' "$@"
 
-/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l "${userName}" "${parameters[@]}" "${hostName}" "${remote_command}"
+/usr/bin/ssh -C -e none -Y -o LogLevel=QUIET -l "${remote_docker_user}" "${parameters[@]}" "${remote_docker_host}" "${remote_command}"

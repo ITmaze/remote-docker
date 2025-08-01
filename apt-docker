@@ -1,4 +1,6 @@
 #!/bin/bash
+local_config_dir="$(dirname "$(readlink -f "$0")")"
+source "${local_config_dir}/docker.config"
 
 if [ $# -eq 2 ]
 then
@@ -9,23 +11,23 @@ else
 	executable="${container}"
 fi
 
-if [ -d ~/docker/itmaze/${container} ]
+if [ -d "${local_docker_home}/${local_docker_repo}/${container}" ]
 then
-	echo "Error: ~/docker/itmaze/${container} already exists"
+	echo "Error: '${local_docker_home}/${local_docker_repo}/${container}' already exists, aborting."
 	exit 1
 fi
 
-if [ -e ~/bin/${executable} ]
+if [ -e "${local_bin_dir}/${executable}" ]
 then
-	echo "Error: ~/bin/${executable} already exists."
+	echo "Error: '${local_bin_dir}/${executable}' already exists, aborting."
 	exit 1
 fi
 
-mkdir -p ~/docker/itmaze/${container}
+mkdir -p "${local_docker_home}/${local_docker_repo}/${container}"
 (
-	cd ~/docker/itmaze/${container}
-	make_dockerfile ${executable}
-	docker-build -t itmaze/${container}
-	ln -s ~/docker/itmaze/${container}/launch ~/bin/${executable}
+	cd "${local_docker_home}/${local_docker_repo}/${container}" || exit
+	make_dockerfile "${executable}"
+	docker-build -t "${local_docker_repo}/${container}"
+	ln -s "${local_docker_home}/${local_docker_repo}/${container}/launch" "${local_bin_dir}/${executable}"
 )
 
