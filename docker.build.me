@@ -3,4 +3,4 @@ local_config_dir="$(dirname "$(readlink -f "$0")")"
 source "${local_config_dir}/docker.config"
 
 name=$(basename "$(pwd)")
-docker-build -t "local_docker_repo/${name}" "$@"
+docker-build -t "${local_docker_repo}/${name}" "$@"
