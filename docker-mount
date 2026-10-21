@@ -21,6 +21,8 @@ then
 	exit 1
 fi
 
+mountPath=$(realpath "${mountPath}")
+
 me=$(whoami)
 myIP=$(hostname -I | cut -d ' ' -f1)
 
