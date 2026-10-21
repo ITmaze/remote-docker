@@ -104,6 +104,7 @@ One thing both have in common is that you need to be able to ssh between both wi
 - sshd
 - uuidgen (uuid-runtime)
 - fromdos (tofrodos)
+- realpath
 
 ## Docker-Machine requirements:
 
